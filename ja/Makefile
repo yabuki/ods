@@ -14,6 +14,8 @@ pdfs = ods-java.pdf ods-cpp.pdf ods-python.pdf
 styles=ods.sty ods-colors.sty
 
 LFLAGS=-interaction=nonstopmode -halt-on-error
+LATEX = uplatex
+BIBTEX = upbibtex
 
 all: $(pdfs)
 
@@ -32,10 +34,10 @@ images:
 	cd images ; make
 
 ods-java.pdf : ods-java.tex $(javs) $(styles) images figs
-	platex $(LFLAGS) ods-java
-	pbibtex ods-java
-	platex $(LFLAGS) ods-java
-	platex $(LFLAGS) ods-java
+	$(LATEX) $(LFLAGS) ods-java
+	$(BIBTEX) ods-java
+	$(LATEX) $(LFLAGS) ods-java
+	$(LATEX) $(LFLAGS) ods-java
 	dvipdfmx ods-java.dvi
 #	latexmk -pdf ods-java
 
@@ -45,10 +47,10 @@ ods-java.tex : ods.tex Makefile
 	sed -i 's/%HEADCOMMAND/\\newcommand{\\cpponly}[1]{}\\newcommand{\\javaonly}[1]{#1}\\newcommand{\\pcodeonly}[1]{}\\newcommand{\\notpcode}[1]{#1}\\newcommand{\\lang}{Java}/' ods-java.tex
 
 ods-cpp.pdf : ods-cpp.tex $(cpps) $(styles) images figs
-	platex $(LFLAGS) ods-cpp
-	bibtex ods-cpp
-	platex $(LFLAGS) ods-cpp
-	platex $(LFLAGS) ods-cpp
+	$(LATEX) $(LFLAGS) ods-cpp
+	$(BIBTEX) ods-cpp
+	$(LATEX) $(LFLAGS) ods-cpp
+	$(LATEX) $(LFLAGS) ods-cpp
 	dvipdfmx ods-cpp.dvi
 #	latexmk -pdf ods-cpp
 
@@ -58,10 +60,10 @@ ods-cpp.tex : ods.tex Makefile
 	sed -i 's/%HEADCOMMAND/\\newcommand{\\javaonly}[1]{}\\newcommand{\\cpponly}[1]{#1}\\newcommand{\\pcodeonly}[1]{}\\newcommand{\\notpcode}[1]{#1}\\newcommand{\\lang}{C++}/' ods-cpp.tex
 
 ods-python.pdf : ods-python.tex $(pyts) $(styles) images figs
-	platex $(LFLAGS) ods-python
-	bibtex ods-python
-	platex $(LFLAGS) ods-python
-	platex $(LFLAGS) ods-python
+	$(LATEX) $(LFLAGS) ods-python
+	$(BIBTEX) ods-python
+	$(LATEX) $(LFLAGS) ods-python
+	$(LATEX) $(LFLAGS) ods-python
 	dvipdfmx ods-python.dvi
 #	latexmk -pdf ods-python
 
@@ -109,9 +111,9 @@ html: java-html cpp-html python-html
 
 java-html : $(javh) ods-java-html.tex epsfigs
 	mkdir -p ods-java
-	platex ods-java-html
-	bibtex ods-java-html
-	platex ods-java-html
+	$(LATEX) ods-java-html
+	$(BIBTEX) ods-java-html
+	$(LATEX) ods-java-html
 	latex2html -init_file latex2html-init -dir ods-java ods-java-html
 #	pdflatex ods-java-html
 
@@ -125,8 +127,8 @@ ods-java-html.tex : ods.tex Makefile
 
 cpp-html : $(cpph) ods-cpp-html.tex epsfigs
 	mkdir -p ods-cpp
-	pdflatex ods-cpp-html
-	bibtex ods-cpp-html
+	$(LATEX) ods-cpp-html
+	$(BIBTEX) ods-cpp-html
 	latex2html -init_file latex2html-init -dir ods-cpp ods-cpp-html
 
 ods-cpp-html.tex : ods.tex Makefile
@@ -138,8 +140,8 @@ ods-cpp-html.tex : ods.tex Makefile
 
 python-html : $(pyth) ods-python-html.tex epsfigs
 	mkdir -p ods-python
-	pdflatex ods-python-html
-	bibtex ods-python-html
+	$(LATEX) ods-python-html
+	$(BIBTEX) ods-python-html
 	latex2html -init_file latex2html-init -dir ods-python ods-python-html
 
 ods-python-html.tex : ods-python.tex Makefile
